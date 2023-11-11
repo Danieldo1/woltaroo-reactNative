@@ -14,7 +14,7 @@ const SearchBar = () => {
                     <Ionicons style={styles.searchIcon} name="search-outline" size={20} color={Colors.medium} />
                     <TextInput style={styles.input} placeholder='Restaurant, groceries,dishes'/>
                 </View>
-                <Link href={'/'} asChild>
+                <Link href={'/(modal)/filter'} asChild>
                     <TouchableOpacity style={styles.optionsBtn}>
                      <Ionicons name="options-outline" size={20} color={Colors.primary} />
                     </TouchableOpacity>
