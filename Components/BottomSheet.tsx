@@ -70,9 +70,11 @@ const styles = StyleSheet.create({
     btn:{
         backgroundColor:Colors.primary,
         padding: 16,
-        borderRadius:4,
+        borderRadius:8,
         margin: 16,
         alignItems:'center',
+        marginTop:'auto',
+        marginBottom:50
     },
     content:{
     flex:1,
