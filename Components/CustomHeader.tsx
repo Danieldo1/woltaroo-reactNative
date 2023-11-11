@@ -1,14 +1,17 @@
 import { View, Text, SafeAreaView,StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
-import React from 'react'
+import React, { useRef } from 'react'
 import {Ionicons} from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
 import { Link } from 'expo-router'
+import BottomSheet from './BottomSheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 const SearchBar = () => {
     return (
         <View style={styles.searchBar}>
             <View style={styles.searchInput}>
                 <View style={styles.searchField}>
+                    <Ionicons style={styles.searchIcon} name="search-outline" size={20} color={Colors.medium} />
                     <TextInput style={styles.input} placeholder='Restaurant, groceries,dishes'/>
                 </View>
                 <Link href={'/'} asChild>
@@ -22,13 +25,19 @@ const SearchBar = () => {
 }
 
 const CustomHeader = () => {
+    const bottomSheetRef= useRef<BottomSheetModal>(null)
+
+    const openModel = () => {
+        bottomSheetRef.current?.present()
+    }
   return (
     <SafeAreaView style={styles.safeArea}>
+        <BottomSheet ref={bottomSheetRef} />
         <View style={styles.container}>
-            <TouchableOpacity >
-                <Image style={styles.bike} source={require('@/assets/images/bike.png')} />
+            <TouchableOpacity onPress={openModel} >
+                <Image style={styles.bike} source={require('@/assets/images/applebike.png')} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.titleContainer}>
+            <TouchableOpacity style={styles.titleContainer} onPress={openModel} >
                 <Text style={styles.title}>Delivery · Now</Text>
                 <View style={styles.location}>
                     <Text style={styles.subtitle}>Pickup</Text>
@@ -101,15 +110,19 @@ backgroundColor: '#fff'
         flex:1,
         backgroundColor: Colors.lightGrey,
         borderRadius:8,
-
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     optionsBtn:{
         padding:10,
         borderRadius:50
     },
+    searchIcon:{
+        paddingLeft:10
+    },
     input:{
         padding:10,
-        color:Colors.medium
+        color:Colors.mediumDark
     }
 })
 
