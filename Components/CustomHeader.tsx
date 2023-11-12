@@ -59,7 +59,7 @@ flex:1,
 backgroundColor: '#fff'
     },
     container:{
-        height:60,
+        height:50,
         backgroundColor: '#fff',
         flexDirection: 'row',
         gap:20,
@@ -114,7 +114,7 @@ backgroundColor: '#fff'
         alignItems: 'center',
     },
     optionsBtn:{
-        padding:10,
+        padding:5,
         borderRadius:50
     },
     searchIcon:{
