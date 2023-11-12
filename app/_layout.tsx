@@ -23,6 +23,7 @@ export default function RootLayoutNav() {
         <Stack.Screen name="index" options={{ 
           header: () => <CustomHeader />
          }} />
+         {/* filter */}
          <Stack.Screen name="(modal)/filter" options={{
           presentation: 'modal',
           headerTitle: 'Filter',
@@ -30,6 +31,17 @@ export default function RootLayoutNav() {
           headerStyle:{
             backgroundColor: Colors.lightGrey,
           },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="close-outline"  size={30} color={Colors.primary} />
+            </TouchableOpacity>
+          )
+         }} />
+          {/* location */}
+         <Stack.Screen name="(modal)/location" options={{
+          presentation: 'fullScreenModal',
+          headerTitle: 'Select Location',
+          
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Ionicons name="close-outline"  size={30} color={Colors.primary} />

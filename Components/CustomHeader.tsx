@@ -40,7 +40,7 @@ const CustomHeader = () => {
             <TouchableOpacity style={styles.titleContainer} onPress={openModel} >
                 <Text style={styles.title}>Delivery · Now</Text>
                 <View style={styles.location}>
-                    <Text style={styles.subtitle}>Pickup</Text>
+                    <Text style={styles.subtitle}>San Francisco</Text>
                     <Ionicons name="chevron-down" size={20} color={Colors.primary} style={{marginLeft:3,marginTop:2}}/>
                 </View>
             </TouchableOpacity>

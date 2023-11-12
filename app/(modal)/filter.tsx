@@ -80,6 +80,7 @@ const Filter = () => {
         });
         setItems(updatedItems);
       };
+      
     const animatedStyles = useAnimatedStyle(() => {
         return {
           width: flexWidth.value,

@@ -32,7 +32,7 @@ const BottomSheet = forwardRef<Ref>((props, ref) => {
         </View>
 
         <Text style={styles.subtitle}>Your Location</Text>
-        <Link href={'/'} asChild>
+        <Link href={'/(modal)/location'} asChild>
             <TouchableOpacity>
                 <View style={styles.location}>
                     <Ionicons name="location-outline" size={20} color={Colors.medium} />
