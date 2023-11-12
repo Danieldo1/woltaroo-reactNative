@@ -12,7 +12,7 @@ const Restaurants = () => {
     }}
     >
       {restaurants.map((item, index) => (
-            <Link href={'/'} asChild key={index}>
+            <Link href={'/details'} asChild key={index}>
                 <TouchableOpacity>
                     <View style={styles.card}>
                         <Image source={item.img} style={styles.img} />
