@@ -59,6 +59,16 @@ export default function RootLayoutNav() {
             </TouchableOpacity>
           )
          }} />
+
+         <Stack.Screen name="basket" options={{
+            headerTitle: 'Cart',
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="arrow-back"  size={30} color={Colors.primary} />
+              </TouchableOpacity>
+            )
+          
+         }} />
       </Stack>
     </BottomSheetModalProvider>
   );

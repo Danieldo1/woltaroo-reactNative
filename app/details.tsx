@@ -6,6 +6,7 @@ import { restaurant } from '@/assets/data/restaurant'
 import { Link, useNavigation } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import useBasketStore from '@/store/basket'
 
 const Details = () => {
     const navigation = useNavigation()
@@ -25,6 +26,8 @@ const Details = () => {
         }
     }
 
+    const {items, total} = useBasketStore()
+
     const DATA= restaurant.food.map((item,index)=>({
             title: item.category,
             data: item.meals,
@@ -35,7 +38,7 @@ const Details = () => {
     const itemsRef = useRef<TouchableOpacity[]>([])
 
     const renderItem: ListRenderItem<any> = ({item, index}) => (
-      <Link href={{pathname: '(modal)/dish', params: {id: item.id} }} asChild>
+      <Link href={{ pathname: '(modal)/dish', params: { id: item.id } }}  asChild>
         <TouchableOpacity style={styles.card}>
           <View style={{flex:1}}>
             <Text style={styles.cardTxt}>{item.name}</Text>
@@ -117,6 +120,7 @@ const Details = () => {
         </View>
       </ParallaxScrollView>
 
+{/* Sticky Slider */}
       <Animated.View style={[styles.stickySlider, animatedStyles]} >
           <View style={styles.sliderShadow}>
 
@@ -129,11 +133,76 @@ const Details = () => {
             </ScrollView>
           </View>
       </Animated.View>
+
+      {/* Basket */}
+
+      {items > 0 && (
+        <View style={styles.basket}>
+          <View style={styles.footerContainer}>
+            <Link href={'/basket'} asChild>
+              <TouchableOpacity style={styles.btn}>
+            <Text style={styles.basketItem}>{items}</Text>
+            <Text style={styles.basketText}>View Cart</Text>
+            <Text style={styles.basketTotal}> ${total}</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </View>
+      )}
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  basketItem:{
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#fff',
+    backgroundColor: '#19AA86',
+    padding: 6,
+    borderRadius: 20,
+  },
+basketText:{
+  fontWeight: 'bold',
+  fontSize: 16,
+  color: '#fff',
+},
+basketTotal:{
+  fontWeight: 'bold',
+  fontSize: 16,
+  color: '#fff',
+},
+btn:{ 
+   backgroundColor: Colors.primary,
+  paddingHorizontal: 16,
+  borderRadius: 8,
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: 16,
+  marginTop: 16,
+  width: '100%',
+  flexDirection: 'row',
+  height: 50
+},
+  footerContainer:{flexDirection: 'row',justifyContent: 'center',gap: 10},
+  basket:{
+      position: 'absolute',
+      backgroundColor: '#fff',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      padding: 16,
+      width: '100%',
+      elevation:10,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: -20,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 10,
+ 
+  },
   stickySlider:{
     position: 'absolute',
  
