@@ -35,7 +35,7 @@ const Details = () => {
     const itemsRef = useRef<TouchableOpacity[]>([])
 
     const renderItem: ListRenderItem<any> = ({item, index}) => (
-      <Link href={'/'} asChild>
+      <Link href={{pathname: '(modal)/dish', params: {id: item.id} }} asChild>
         <TouchableOpacity style={styles.card}>
           <View style={{flex:1}}>
             <Text style={styles.cardTxt}>{item.name}</Text>
