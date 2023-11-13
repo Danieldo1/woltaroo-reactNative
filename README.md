@@ -1,5 +1,5 @@
 # Woltaroo - Food Delivery App
-![Gif showcasing the app](https://i.ibb.co/9Nnb9L2/Untitled-design.gif)
+![Gif showcasing the app](./video/capture.gif)
 
 Woltaroo is a React Native-based food delivery app that draws inspiration from the user-friendly interface of Deliveroo. This app streamlines the food ordering process, offering a seamless experience for users to discover, choose, and order their favorite dishes from local restaurants.
 
