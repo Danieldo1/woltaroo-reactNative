@@ -1,19 +1,38 @@
-import { View, Text,StyleSheet, Image, TouchableOpacity, SectionList, ListRenderItem } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { View, Text,StyleSheet, Image, TouchableOpacity, SectionList, ListRenderItem, ScrollViewComponent, ScrollView } from 'react-native'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import ParallaxScrollView from '@/Components/Parallax'
 import Colors from '@/constants/Colors'
 import { restaurant } from '@/assets/data/restaurant'
 import { Link, useNavigation } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 const Details = () => {
     const navigation = useNavigation()
+    const [activeIndex, setActiveIndex] = useState(0)
+
+    const opacity = useSharedValue(0)
+    const animatedStyles = useAnimatedStyle(() => ({
+        opacity: opacity.value
+    }))
+
+    const onScroll = (event: any) => {
+        const yOffset = event.nativeEvent.contentOffset.y
+        if(yOffset >370){
+            opacity.value = withTiming(1)
+        } else {
+            opacity.value = withTiming(0)
+        }
+    }
 
     const DATA= restaurant.food.map((item,index)=>({
             title: item.category,
             data: item.meals,
             index
     }))
+
+    const scrollRef = useRef<ScrollView>(null)
+    const itemsRef = useRef<TouchableOpacity[]>([])
 
     const renderItem: ListRenderItem<any> = ({item, index}) => (
       <Link href={'/'} asChild>
@@ -53,10 +72,20 @@ const Details = () => {
       })  
     },[])
 
+    const selectedCategory= (index:number) => {
+      const selected = itemsRef.current[index]
 
+        setActiveIndex(index)
+
+        selected.measure((x,) => {
+            scrollRef.current?.scrollTo({x: x - 16, y: 0, animated: true})
+        })
+    }
+    
   return (
     <>
       <ParallaxScrollView 
+      scrollEvent={onScroll}
       style={{ flex: 1 }}
       backgroundColor={'#fff'}
       renderBackground={() => (
@@ -71,7 +100,11 @@ const Details = () => {
         <View style={styles.detailContainer}>
         <Text style={styles.restName}>{restaurant.name}</Text>
         <Text style={styles.restAbout}>{restaurant.about}</Text>
-        <Text style={styles.restTags}>{restaurant.delivery} • {restaurant.tags.map((item, index) => `${item}${index < restaurant.tags.length - 1 ? ' • ' : ''}`)}</Text>
+        <View style={{flexDirection: 'row',flex:1}}>
+        <Image style={styles.bike} source={require('../assets/images/applebike.png')} /> 
+        <Text style={styles.restTag}>Delivery: {restaurant.delivery} </Text>
+        </View>
+        <Text style={styles.restTags}> {restaurant.tags.map((item, index) => `${item}${index < restaurant.tags.length - 1 ? ' • ' : ''}`)}</Text>
         
         <SectionList contentContainerStyle={{paddingBottom: 50}} keyExtractor={(item,index)=> `${index + item.id}`} scrollEnabled={false} sections={DATA} renderItem={renderItem}
         
@@ -81,15 +114,83 @@ const Details = () => {
           <Text style={styles.sectionHeader}>{title}</Text>
         )}
         />
-
-        
         </View>
       </ParallaxScrollView>
+
+      <Animated.View style={[styles.stickySlider, animatedStyles]} >
+          <View style={styles.sliderShadow}>
+
+            <ScrollView ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{paddingHorizontal: 16, alignItems: 'center',gap:20,paddingBottom: 4}}>
+           {restaurant.food.map((item, index) => (
+             <TouchableOpacity ref={(ref) => itemsRef.current[index] = ref!} key={index} style={activeIndex === index ? styles.sliderBtnActive : styles.sliderBtn} onPress={() => selectedCategory(index)}>
+               <Text style={activeIndex === index ? styles.sliderBtnTxtActive : styles.sliderBtnTxt}>{item.category}</Text>
+             </TouchableOpacity>
+           ))}
+            </ScrollView>
+          </View>
+      </Animated.View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  stickySlider:{
+    position: 'absolute',
+ 
+    height: 50,
+    left:0,
+    right:0,
+    top:100,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    paddingBottom: 4
+  },
+  sliderShadow:{
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 20,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 3,
+    width: '100%',
+    height:'100%'
+  },
+  sliderBtnTxtActive:{
+    fontWeight: 'bold',
+    color: '#fff',
+    fontSize: 16
+  },
+  sliderBtnActive:{
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    borderRadius: 50
+  },
+  sliderBtn:{
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    borderRadius: 50
+  },
+  sliderBtnTxt:{
+    
+    color: Colors.primary,
+    fontSize: 16
+  },
+  bike:{
+    width: 30,
+    height: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    marginLeft: 16
+  },
+  
   cardInfo:{
     fontSize: 14,
     color: Colors.medium,
@@ -164,12 +265,25 @@ cardPrice:{
         marginTop: 16,
         marginLeft: 16
     },
+    restTag:{
+      fontSize: 16,
+        marginTop:3,
+        margin: 6,
+        lineHeight: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        color: Colors.mediumDark
+    },
     restTags:{
         fontSize: 16,
         marginTop:6,
         margin: 16,
         lineHeight: 25,
-        color: Colors.mediumDark
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        color: Colors.medium
     },
     restAbout:{
        fontSize: 16,
